@@ -28,7 +28,12 @@ module Chimera {
     operator *(a : Interval, b : Interval) {
       if a.isempty || b.isempty then return new Interval(NAN, NAN);
       if a == 0 || b == 0 then return new Interval(0, 0);
-      return new Interval(min(a.lo * b.lo, a.lo * b.hi, a.hi * b.lo, a.hi * b.hi), max(a.lo * b.lo, a.lo * b.hi, a.hi * b.lo, a.hi * b.hi));
+      var lolo = a.lo * b.lo,
+          lohi = a.lo * b.hi,
+          hilo = a.hi * b.lo,
+          hihi = a.hi * b.hi;
+
+      return new Interval(_min_no_nan(_min_no_nan(lolo, lohi), _min_no_nan(hilo, hihi)), _max_no_nan(_max_no_nan(lolo, lohi), _max_no_nan(hilo, hihi)));
     }
 
     proc inv {
@@ -101,5 +106,21 @@ module Chimera {
 
   proc infsup(lo : real) {
     return new Interval(lo, lo);
+  }
+
+  proc _min_no_nan(a : real, b : real) {
+    if isnan(a) then return b;
+    
+    if isnan(b) then return a;
+    
+    return min(a, b);
+  }
+
+  proc _max_no_nan(a : real, b : real) {
+    if isnan(a) then return b;
+    
+    if isnan(b) then return a;
+    
+    return max(a, b);
   }
 }

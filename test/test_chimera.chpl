@@ -15,6 +15,8 @@ proc test_multiplication(test : borrowed Test) throws {
     test.assertTrue(infsup(1, 2) * infsup(-2, 3) == infsup(-4, 6));
     test.assertTrue(infsup(0, 0) * infsup(-INFINITY, INFINITY) == infsup(0, 0));
     test.assertTrue((infsup(0, 0) * infsup(NAN, NAN)).isempty);
+    test.assertTrue(infsup(0, INFINITY) * infsup(-INFINITY, 1) == infsup(-INFINITY, INFINITY));
+    test.assertTrue((infsup(-INFINITY, INFINITY) * infsup(NAN, NAN)).isempty);
 }
 
 proc test_inv(test : borrowed Test) throws {
