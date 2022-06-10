@@ -2,8 +2,9 @@ use UnitTest;
 use Chimera;
 
 proc test_addition(test : borrowed Test) throws {
-    test.assertTrue(infsup(1, 2) + infsup(2, 3) == infsup(3, 5));
+    test.assertEqual(infsup(1, 2) + infsup(2, 3), infsup(3, 5));
     test.assertTrue(infsup(1, INFINITY) + infsup(-INFINITY, 2) == infsup(-INFINITY, INFINITY));
+    test.assertTrue(infsup(1, 2) + 3 == infsup(4, 5));
 }
 
 proc test_subtraction(test : borrowed Test) throws {
@@ -53,6 +54,7 @@ proc test_pow(test : borrowed Test) throws {
     test.assertTrue(e ** 3 == infsup(-8, 27));
     test.assertTrue((f ** 2).isempty);
     test.assertTrue((f ** 3).isempty);
+    //test.assertEqual(exp(infsup(0, 0)), infsup(1, 1));
 }
 
 proc test_set_operation(test : borrowed Test) throws {
