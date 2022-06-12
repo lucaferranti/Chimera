@@ -9,15 +9,15 @@ proc test_addition(test : borrowed Test) throws {
 
 proc test_subtraction(test : borrowed Test) throws {
     test.assertTrue(infsup(1, 2) - infsup(1, 2) == infsup(-1, 1));
-    test.assertTrue((infsup(1, 2) - infsup(NAN, NAN)).isempty);
+    test.assertTrue(isempty(infsup(1, 2) - infsup(NAN, NAN)));
 }
 
 proc test_multiplication(test : borrowed Test) throws {
     test.assertTrue(infsup(1, 2) * infsup(-2, 3) == infsup(-4, 6));
     test.assertTrue(infsup(0, 0) * infsup(-INFINITY, INFINITY) == infsup(0, 0));
-    test.assertTrue((infsup(0, 0) * infsup(NAN, NAN)).isempty);
+    test.assertTrue(isempty(infsup(0, 0) * infsup(NAN, NAN)));
     test.assertTrue(infsup(0, INFINITY) * infsup(-INFINITY, 1) == infsup(-INFINITY, INFINITY));
-    test.assertTrue((infsup(-INFINITY, INFINITY) * infsup(NAN, NAN)).isempty);
+    test.assertTrue(isempty(infsup(-INFINITY, INFINITY) * infsup(NAN, NAN)));
 }
 
 proc test_inv(test : borrowed Test) throws {
@@ -28,12 +28,12 @@ proc test_inv(test : borrowed Test) throws {
     var e = infsup(-2, 2);
     var f = infsup(NAN, NAN);
 
-    test.assertTrue(a.inv == infsup(0.5, 1));
-    test.assertTrue(b.inv == infsup(-1, -0.5));
-    test.assertTrue(c.inv == infsup(1, INFINITY));
-    test.assertTrue(d.inv == infsup(-INFINITY, -1));
-    test.assertTrue(e.inv == infsup(-INFINITY, INFINITY));
-    test.assertTrue(f.inv.isempty);
+    test.assertTrue(inv(a) == infsup(0.5, 1));
+    test.assertTrue(inv(b) == infsup(-1, -0.5));
+    test.assertTrue(inv(c) == infsup(1, INFINITY));
+    test.assertTrue(inv(d) == infsup(-INFINITY, -1));
+    test.assertTrue(inv(e) == infsup(-INFINITY, INFINITY));
+    test.assertTrue(isempty(inv(f)));
 }
 
 proc test_pow(test : borrowed Test) throws {
@@ -52,17 +52,22 @@ proc test_pow(test : borrowed Test) throws {
     test.assertTrue(d ** 2 == infsup(0, 1));
     test.assertTrue(e ** 2 == infsup(0, 9));
     test.assertTrue(e ** 3 == infsup(-8, 27));
-    test.assertTrue((f ** 2).isempty);
-    test.assertTrue((f ** 3).isempty);
-    //test.assertEqual(exp(infsup(0, 0)), infsup(1, 1));
+    test.assertTrue(isempty(f ** 2));
+    test.assertTrue(isempty(f ** 3));
 }
 
 proc test_set_operation(test : borrowed Test) throws {
-    test.assertTrue(infsup(1, 2).hull(infsup(-2, -1)) == infsup(-2, 2));
-    test.assertTrue(infsup(-2, 2).hull(infsup(-1, 1)) == infsup(-2, 2));
-    test.assertTrue(infsup(NAN, NAN).hull(infsup(-1, 1)) == infsup(-1, 1));
-    test.assertTrue(infsup(-1, 1).hull(infsup(NAN, NAN)) == infsup(-1, 1));
-    test.assertTrue(infsup(NAN, NAN).hull(infsup(NAN, NAN)).isempty);
+    test.assertTrue(hull(infsup(1, 2), infsup(-2, -1)) == infsup(-2, 2));
+    test.assertTrue(hull(infsup(-2, 2), infsup(-1, 1)) == infsup(-2, 2));
+    test.assertTrue(hull(infsup(NAN, NAN), infsup(-1, 1)) == infsup(-1, 1));
+    test.assertTrue(hull(infsup(-1, 1), infsup(NAN, NAN)) == infsup(-1, 1));
+    test.assertTrue(isempty(hull(infsup(NAN, NAN), infsup(NAN, NAN))));
+
+    test.assertTrue(infsup(0, 2).contains(1));
+    test.assertTrue(infsup(0,2 ).contains(0));
+    test.assertFalse(infsup(0, 2).contains(3));
+    test.assertFalse(infsup(0, 2).contains(-1));
+    test.assertFalse(emptyinterval.contains(0));
 }
 
 UnitTest.main();
