@@ -14,11 +14,12 @@ module Chimera {
     }
   }
 
-  proc emptyinterval {return new Interval(NAN, NAN);}
-
+  proc EMPTY {return new Interval(NAN, NAN);}
+  proc ENTIRE {return new Interval(-INFINITY, INFINITY);}
+  
   proc isIntervalType(type t: Interval) param { return true; }
   proc isIntervalType(type t) param { return false; }
-  proc isIntervalOrRealType(type t) param {return isIntervalType(t) || isRealType(t);}
+  proc isIntervalOrRealType(type t) param {return isIntervalType(t) || isNumericType(t);}
   proc isEitherInterval(type t, type s) param { return isIntervalType(t) || isIntervalType(s); }
 
   public use arithmetic;

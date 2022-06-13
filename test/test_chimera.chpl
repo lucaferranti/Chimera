@@ -56,49 +56,4 @@ proc test_pow(test : borrowed Test) throws {
     test.assertTrue(isempty(f ** 3));
 }
 
-proc test_set_operation(test : borrowed Test) throws {
-    test.assertTrue(hull(infsup(1, 2), infsup(-2, -1)) == infsup(-2, 2));
-    test.assertTrue(hull(infsup(-2, 2), infsup(-1, 1)) == infsup(-2, 2));
-    test.assertTrue(hull(infsup(NAN, NAN), infsup(-1, 1)) == infsup(-1, 1));
-    test.assertTrue(hull(infsup(-1, 1), infsup(NAN, NAN)) == infsup(-1, 1));
-    test.assertTrue(isempty(hull(infsup(NAN, NAN), infsup(NAN, NAN))));
-
-    test.assertTrue(infsup(0, 2).contains(1));
-    test.assertTrue(infsup(0,2 ).contains(0));
-    test.assertFalse(infsup(0, 2).contains(3));
-    test.assertFalse(infsup(0, 2).contains(-1));
-    test.assertFalse(emptyinterval.contains(0));
-}
-
-proc test_prevnext_float(test : borrowed Test) throws {
-    test.assertEqual(nextup(0.0), 5e-324);
-    test.assertEqual(nextup(1.0), 0x1.0000000000001p0);
-    test.assertEqual(nextup(0x1.FFFFFFFFFFFFFp2), 0x1p3);
-    test.assertEqual(nextup(0x1.FFFFFFFFFFFFFp1023), INFINITY);
-    test.assertEqual(nextup(INFINITY), INFINITY);
-    test.assertTrue(isnan(nextup(NAN)));
-    test.assertEqual(nextup(0x1p-1020), 0x1.0000000000001p-1020);
-    test.assertEqual(nextup(-0.0), 5e-324);
-    test.assertEqual(nextup(-1.0), -0x1.FFFFFFFFFFFFFp-1);
-    test.assertEqual(nextup(-INFINITY), -0x1.FFFFFFFFFFFFFp1023);
-    test.assertEqual(nextup(-0x1p-1020), -0x1.FFFFFFFFFFFFFp-1021);
-
-    test.assertEqual(nextdown(0.0), -5e-324);
-    test.assertEqual(nextdown(1.0), 0x1.FFFFFFFFFFFFFp-1);
-    test.assertEqual(nextdown(INFINITY), 0X1.FFFFFFFFFFFFFp1023);
-    test.assertEqual(nextdown(0x1p-1019), 0x1.FFFFFFFFFFFFFp-1020);
-    test.assertEqual(nextdown(-INFINITY), -INFINITY);
-    test.assertEqual(nextdown(-0X1.FFFFFFFFFFFFFp1023), -INFINITY);
-    test.assertTrue(isnan(nextdown(NAN)));
-
-    test.assertEqual(nextout(0.0), (-5e-324, 5e-324));
-    test.assertEqual(nextout(INFINITY), (0x1.FFFFFFFFFFFFFp1023, INFINITY));
-    test.assertEqual(nextout(-INFINITY), (-INFINITY, -0x1.FFFFFFFFFFFFFp1023));
-    test.assertTrue(isnan(nextout(NAN)[0]));
-    test.assertTrue(isnan(nextout(NAN)[1]));
-    test.assertEqual(nextout(0x1.FFFFFFFFFFFFFp1023), (0x1.FFFFFFFFFFFFEp1023, INFINITY));
-    test.assertEqual(nextout(-0x1.FFFFFFFFFFFFFp1023), (-INFINITY, -0x1.FFFFFFFFFFFFEp1023));
-    test.assertEqual(nextout(0x1.Bp-1019), (0x1.AFFFFFFFFFFFFp-1019, 0x1.B000000000001p-1019));
-}
-
 UnitTest.main();
