@@ -10,8 +10,7 @@ module arithmetic {
     }
 
     operator Interval.*(a, b) where isEitherInterval(a.type, b.type) {
-      if isempty(a) || isempty(b) then return new Interval(NAN, NAN);
-      if a == 0 || b == 0 then return new Interval(0, 0);
+      if (a == 0 || b == 0) && !isempty(a) && !isempty(b) then return new Interval(0, 0);
       var lolo = inf(a) * inf(b),
           lohi = inf(a) * sup(b),
           hilo = sup(a) * inf(b),
