@@ -1,6 +1,7 @@
 /* Documentation for chimera */
 module Chimera {
   use IO;
+  public use crlibm;
 
   record Interval {
     var lo : real;
